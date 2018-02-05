@@ -1,0 +1,62 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.meizu.base</groupId>
+        <artifactId>parent.war</artifactId><!-- 依赖parent.node公共包 -->
+        <version>2.2.1</version>
+    </parent>
+    <groupId>com.meizu.bs</groupId><!-- 最好也改一下用com.meizu.xxxxx   xxxxx为某一个大的项目名-->
+    <artifactId>your project name</artifactId>
+    <version>1.0.0-RC01</version><!-- 项目的版本号，每次jenkins构建时修改 -->
+    <packaging>war</packaging>
+
+    <name>your project name</name>
+    <url>http://maven.apache.org</url>
+    <description>your project description</description>
+    <build>
+      <plugins>
+              <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                  <failOnMissingWebXml>false</failOnMissingWebXml>
+                  <webResources>
+                    <resource>
+                      <directory>output/release</directory>
+                    </resource>
+                  </webResources>
+                </configuration>
+              </plugin>
+
+              <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-ant-plugin</artifactId>
+                <configuration>
+                  <failOnMissingWebXml>false</failOnMissingWebXml>
+                  <webResources>
+                    <resource>
+                      <directory>output/release</directory>
+                    </resource>
+                  </webResources>
+                  <target>
+                    <echo>combining js...</echo>
+                     <!-- 打包静态资源，单独部署CDN -->
+                    <zip destfile="${project.build.directory}/${project.artifactId}-${project.version}-resources.zip">
+                      <zipfileset dir="${project.build.directory}/${project.artifactId}-${project.version}" prefix="resources">
+                        <exclude name="META-INF/**" />
+                        <exclude name="WEB-INF/**" />
+                      </zipfileset>
+                    </zip>
+                  </target>
+                </configuration>
+              </plugin>
+            <!--build-helper-maven-plugin 插件指定 xxx-xxx-resources.zip 为需要部署的文件 -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

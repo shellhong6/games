@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+  <title>游戏页面</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no">
+  <meta name="format-detection" content="telephone=no">
+  <meta http-equiv="x-dns-prefetch-control" content="on">
+
+  <!-- S 引用前端页面片 -->
+  <link rel="stylesheet" href="../css/gb.min_979d4292.css" onerror="__reloadResource(this)">
+  <link rel="stylesheet" href="../css/game.min_f845db1c.css" onerror="__reloadResource(this)">
+  <!-- E 引用前端页面片 -->
+
+  <!-- global:css -->
+
+  <!-- endglobal -->
+
+</head>
+<!-- 注：加ontouchstart使css：active生效 -->
+
+<body ontouchstart="">
+
+  <div class="wrapper">
+
+    <!-- S 游戏互动部分 -->
+    <div class="waterful_loading type_disappear" style="display: none;">
+      <div class="waterful_loading_inner">
+        <div class="waterful_loading_progress_bar"><span style="transform: translateX(0%);"></span></div>
+        <p class="waterful_loading_progress">100%</p>
+      </div>
+    </div>
+
+    <div class="waterful_interactive">
+
+      <div style="display:none;" class="waterful_music"></div>
+
+      <canvas id="waterfulGameCanvas" class="waterful_game" width="660" height="570"></canvas>
+
+      <div class="waterful_skills_btn">
+        <div class="waterful_skills_btn_enlarge">
+          <svg width="46" height="46"><circle cx="23" cy="23" r="20" stroke-width="3"></circle></svg>
+          <span>∞</span>
+        </div>
+        <div class="waterful_skills_btn_magnet"><span>∞</span></div>
+      </div>
+
+      <div class="waterful_ctrls_btn type_left">左</div>
+      <div class="waterful_ctrls_btn type_right">右</div>
+    </div>
+    <!-- E 游戏互动部分 -->
+  </div>
+
+  <!-- S 引用前端页面片 -->
+  <script src="../js/createjs.min_54e1c372.js" onerror="__reloadResource(this)"></script>
+  <script src="../js/matter.min_c8cf303c.js" onerror="__reloadResource(this)"></script>
+  <script src="../js/game.min_59e33a01.js" onerror="__reloadResource(this)"></script>
+  <!-- E 引用前端页面片 -->
+  <!-- global:js -->
+  <!-- endglobal -->
+
+  <script>
+    var waterful = new Waterful()
+    var preload = new Promise(function(resolve, reject) {
+      waterful.preload(function(e) {
+        var progress = Math.floor(e.progress * 100)
+        document.querySelector('.waterful_loading_progress_bar span').style.transform = 'translateX(' + (progress - 100) + '%)'
+        document.querySelector('.waterful_loading_progress').innerHTML = progress + '%'
+        if (progress === 100) resolve()
+      })
+    })
+    Promise.all([preload])
+      .then(function() {
+        var loading = document.querySelector('.waterful_loading')
+        loading.classList.add('type_disappear')
+        setTimeout(function() {
+          loading.style.display = 'none'
+        }, 400)
+        waterful.init({
+          red: 6,
+          yellow: 6,
+          green: 6,
+          score: {
+            left: [],
+            right: []
+          },
+          callbacks: {
+            score: function(score) {
+              console.log('score: ', score, score.total)
+            },
+            end: function(score) {
+              console.log('end: ', score, score.total)
+            }
+          }
+        })
+      })
+    // 放大技能
+    document.querySelector('.waterful_skills_btn_enlarge').addEventListener('click', function() {
+      waterful.enlarge()
+    })
+    // 磁铁技能
+    document.querySelector('.waterful_skills_btn_magnet').addEventListener('click', function() {
+      waterful.magnet()
+    })
+  </script>
+
+
+</body></html>
