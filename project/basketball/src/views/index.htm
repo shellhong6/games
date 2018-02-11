@@ -1,9 +1,14 @@
 <!DOCTYPE html>
 <!-- saved from url=(0033)http://jdc.jd.com/demo/ball-demo/ -->
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<html lang="en">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 	<title>demo</title>
-<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"></head>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+</head>
+
 <body style="margin: 0px; overflow: hidden;">
 	<script src="../js/laya.core.min.js"></script>
 	<script src="../js/laya.webgl.min.js"></script>
@@ -11,12 +16,11 @@
 	<script src="../js/LayaRender.js"></script>
 
 	<script>
-
 		var Game = {
 			init: function() {
 				/*
-			     * 初始化画布
-				*/
+				 * 初始化画布
+				 */
 				this.Stage = Laya.Stage;
 				this.Loader = Laya.Loader;
 				this.WebGL = Laya.WebGL;
@@ -25,15 +29,15 @@
 				this.Event = Laya.Event;
 				this.Sprite = Laya.Sprite;
 
-			    Config.isAntialias = true;
+				Config.isAntialias = true;
 				Laya.init(1334, 750, Laya.WebGL); // 初始化一个画布，使用 WebGL 渲染，默认背景为黑色
 				Laya.stage.alignV = 'top'; // 适配垂直对齐方式
-			    Laya.stage.alignH = 'middle'; // 适配水平对齐方式
-			    Laya.stage.screenMode = this.Stage.SCREEN_HORIZONTAL; // 始终以横屏展示
-			    Laya.stage.scaleMode = "fixedwidth"; // 宽度不变，高度根据屏幕比例缩放
+				Laya.stage.alignH = 'middle'; // 适配水平对齐方式
+				Laya.stage.screenMode = this.Stage.SCREEN_HORIZONTAL; // 始终以横屏展示
+				Laya.stage.scaleMode = "fixedwidth"; // 宽度不变，高度根据屏幕比例缩放
 
 
-			    this.createMatter();
+				this.createMatter();
 				this.createScene();
 				this.drawLine();
 				this.addBody();
@@ -41,55 +45,55 @@
 			},
 			createMatter: function() {
 				this.engine;
-		        var world;
+				var world;
 
-		        this.engine = Matter.Engine.create({
-		            enableSleeping: true // 开启睡眠
-		        });
+				this.engine = Matter.Engine.create({
+					enableSleeping: true // 开启睡眠
+				});
 
-		        world = this.engine.world;
-		        Matter.Engine.run(this.engine); // Engine 启动
+				world = this.engine.world;
+				Matter.Engine.run(this.engine); // Engine 启动
 
-		        var render = LayaRender.create({
-		            engine: this.engine,
-		            options: {
-		                wireframes: false,
-		                background: "#000"
-		            }
-		        });
+				var render = LayaRender.create({
+					engine: this.engine,
+					options: {
+						wireframes: false,
+						background: "#000"
+					}
+				});
 
-		        LayaRender.run(render); // Render 启动
+				LayaRender.run(render); // Render 启动
 			},
 			createScene: function() {
 				// 加入背景
-		        var bg = new this.Sprite();
-      			Laya.stage.addChild(bg);
-      			bg.pos(0, 0);
-      			bg.loadImage('../images/bg.jpg');
+				var bg = new this.Sprite();
+				Laya.stage.addChild(bg);
+				bg.pos(0, 0);
+				bg.loadImage('../images/bg.jpg');
 
-		        // 加入篮架
-		        var basketballStand = new this.Sprite();
-		        Laya.stage.addChild(basketballStand);
-		        basketballStand.pos(1050, 30);
-		        basketballStand.loadImage('../images/basketball_stand.png');
+				// 加入篮架
+				var basketballStand = new this.Sprite();
+				Laya.stage.addChild(basketballStand);
+				basketballStand.pos(1050, 30);
+				basketballStand.loadImage('../images/basketball_stand.png');
 
-              	// 篮框
-              	var basketry = new this.Sprite();
-              	basketry.zOrder = 10;
-              	Laya.stage.addChild(basketry);
-              	basketry.graphics.drawPath(0, 0, [
-        			["moveTo", 4, 0],
-        			["lineTo", 92, 0],
-        			["arcTo", 96, 0, 96, 4, 4],
-        			["arcTo", 96, 8, 92, 8, 4],
-        			["lineTo", 4, 8],
-        			["arcTo", 0, 8, 0, 4, 6],
-        			["arcTo", 0, 4, 0, 0, 6],
-        			["closePath"]
-              	], {
-              		fillStyle: "#f15b24"
-              	});
-              	basketry.pos(1065, 170);
+				// 篮框
+				var basketry = new this.Sprite();
+				basketry.zOrder = 10;
+				Laya.stage.addChild(basketry);
+				basketry.graphics.drawPath(0, 0, [
+					["moveTo", 4, 0],
+					["lineTo", 92, 0],
+					["arcTo", 96, 0, 96, 4, 4],
+					["arcTo", 96, 8, 92, 8, 4],
+					["lineTo", 4, 8],
+					["arcTo", 0, 8, 0, 4, 6],
+					["arcTo", 0, 4, 0, 0, 6],
+					["closePath"]
+				], {
+					fillStyle: "#f15b24"
+				});
+				basketry.pos(1065, 170);
 
 			},
 			drawLine: function() {
@@ -97,53 +101,52 @@
 				var This = this;
 
 				var initX = 500, // X 轴起点
-		            initY = 254, // Y 轴起点
-		            r = 120,
-		            angle = 0,
-		            force = 0,
-		            isClick = false;
+					initY = 254, // Y 轴起点
+					r = 120,
+					angle = 0,
+					force = 0,
+					isClick = false;
 
-		        var line = new this.Sprite();
+				var line = new this.Sprite();
 
-		        Laya.stage.addChild(line);
+				Laya.stage.addChild(line);
 
-		        Laya.stage.on(this.Event.MOUSE_DOWN, this, function(e) {
-		            isClick = true;
-		        });
+				Laya.stage.on(this.Event.MOUSE_DOWN, this, function(e) {
+					isClick = true;
+				});
 
-		        Laya.stage.on(this.Event.MOUSE_MOVE, this, function(e) {
-		            if (!isClick) return false;
+				Laya.stage.on(this.Event.MOUSE_MOVE, this, function(e) {
+					if (!isClick) return false;
 
-		            var touches = e;
+					var touches = e;
 
-		            if (!touches) return false;
+					if (!touches) return false;
 
-		            var moveX = touches.stageX;
-		            var moveY = touches.stageY;
+					var moveX = touches.stageX;
+					var moveY = touches.stageY;
 
-		            angle = This.getRad(initX, initY, moveX, moveY);
+					angle = This.getRad(initX, initY, moveX, moveY);
+					if (angle >= -1.4 && angle <= 1.4) {
+						line.graphics.clear();
 
-		            if (angle >= -1.4 && angle <= 1.4) {
-		                line.graphics.clear();
+						var z = This.getDistance(initX, initY, moveX, moveY);
 
-		                var z = This.getDistance(initX, initY, moveX, moveY);
+						if (z <= r) {
+							line.graphics.drawLine(initX, initY, moveX, moveY, "#ffe400", 14);
+							force = z; // 未超出的力度
+						} else {
+							line.graphics.drawLine(initX, initY, r * Math.cos(angle) + initX, r * Math.sin(angle) + initY, "#ffe400", 14);
 
-		                if (z <= r) {
-					      	line.graphics.drawLine(initX, initY, moveX, moveY, "#ffe400", 14);
-					      	force = z; // 未超出的力度
-					    } else {
-		                    line.graphics.drawLine(initX, initY, r * Math.cos(angle) + initX, r * Math.sin(angle) + initY, "#ffe400", 14);
+							// 超出的力度
+							force = This.getDistance(initX, initY, r * Math.cos(angle) + initX, r * Math.sin(angle) + initY);
+						}
+					}
 
-		                    // 超出的力度
-		                    force = This.getDistance(initX, initY, r * Math.cos(angle) + initX, r * Math.sin(angle) + initY);
-					    }
-		            }
+					e.stopPropagation();
+				});
 
-		            e.stopPropagation();
-		        });
-
-		        Laya.stage.on(this.Event.MOUSE_UP, this, function(e) {
-		            isClick = false;
+				Laya.stage.on(this.Event.MOUSE_UP, this, function(e) {
+					isClick = false;
 
 					line.graphics.clear();
 
@@ -153,109 +156,110 @@
 
 					force = 0;
 					angle = 0;
-		        });
+				});
 			},
 			getRad: function(x1, y1, x2, y2) { // 返回两点之间的弧度
-		        var x = x2 - x1;
-			  	var y = y2 - y1;
-			  	var Hypotenuse = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
-			  	var angle = x / Hypotenuse;
-			  	var rad = Math.acos(angle);
-			  	if (y2 < y1) {
-			    	rad = -rad;
-			  	}
-			 	return rad;
-		    },
-		    getDistance: function(x1, y1, x2, y2) { // 计算两点间的距离
-		        return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
-		    },
-		    addBall: function(x, y) {
-		    	var ball = Matter.Bodies.circle(500, 254, 28, { // x, y, 半径
-		    	    isStatic: false, // 不固定
-		    	    density: 0.68, // 密度
-		    	    restitution: 0.8, // 弹性
-		    	    render: {
-		    	        visible: true, // 开启渲染
-		    	        sprite: {
-		    	            texture: '../images/ball.png', // 设置为篮球图
-		    	            xOffset: 28, // x 设置为中心点
-		    	            yOffset: 28 // y 设置为中心点
-		    	        }
-		    	    }
-		    	});
+				var x = x2 - x1;
+				var y = y2 - y1;
+				var Hypotenuse = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+				var angle = x / Hypotenuse;
+				var rad = Math.acos(angle);
+				if (y2 < y1) {
+					rad = -rad;
+				}
+				return rad;
+			},
+			getDistance: function(x1, y1, x2, y2) { // 计算两点间的距离
+				return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
+			},
+			addBall: function(x, y) {
+				var ball = Matter.Bodies.circle(500, 254, 28, { // x, y, 半径
+					isStatic: false, // 不固定
+					density: 0.68, // 密度
+					restitution: 0.8, // 弹性
+					render: {
+						visible: true, // 开启渲染
+						sprite: {
+							texture: '../images/ball.png', // 设置为篮球图
+							xOffset: 28, // x 设置为中心点
+							yOffset: 28 // y 设置为中心点
+						}
+					}
+				});
 
-		    	// 施加力
-		    	Matter.Body.applyForce(ball, ball.position, {
-		    	    x: x,
-		    	    y: y
-		    	});
+				// 施加力
+				Matter.Body.applyForce(ball, ball.position, {
+					x: x,
+					y: y
+				});
 
-		    	// 添加到世界
-		    	Matter.World.add(this.engine.world, [ball]);
+				// 添加到世界
+				Matter.World.add(this.engine.world, [ball]);
 
-		    	// 监听篮球的睡眠状态
-		    },
-		    addBody: function() {
-		    	// 篮球网
-    	        var group = Matter.Body.nextGroup(true);
-    			var netBody = Matter.Composites.softBody(1067, 164, 6, 4, 0, 0, false, 8.5, {
-    				firction: 1, // 摩擦力
-    				frictionAir: 0.08, // 空气摩擦力
-    				restitution: 0, // 弹性
-    				render: {
-    					visible: false
-    				},
-    				collisionFilter: {
-    					group: group
-    				}
-    			}, {
-    		 	    render: {
-    		   		    lineWidth: 2,
-    		    	    strokeStyle: "#fff"
-    		  	    }
-    		    });
-    		    // 将篮球网固定起来
-    			netBody.bodies[0].isStatic = netBody.bodies[5].isStatic = true;
+				// 监听篮球的睡眠状态
+			},
+			addBody: function() {
+				// 篮球网
+				var group = Matter.Body.nextGroup(true);
+				var netBody = Matter.Composites.softBody(1067, 164, 6, 4, 0, 0, false, 8.5, {
+					firction: 1, // 摩擦力
+					frictionAir: 0.08, // 空气摩擦力
+					restitution: 0, // 弹性
+					render: {
+						visible: false
+					},
+					collisionFilter: {
+						group: group
+					}
+				}, {
+					render: {
+						lineWidth: 2,
+						strokeStyle: "#fff"
+					}
+				});
+				// 将篮球网固定起来
+				netBody.bodies[0].isStatic = netBody.bodies[5].isStatic = true;
 
-    			// 篮板刚体
-    			var backboard = Matter.Bodies.rectangle(1208, 120, 50, 136, {
-    	        	isStatic: true,
-    	        	render: {
-    	          		visible: false
-    	        	}
-    	      	});
+				// 篮板刚体
+				var backboard = Matter.Bodies.rectangle(1208, 120, 50, 136, {
+					isStatic: true,
+					render: {
+						visible: false
+					}
+				});
 
-    	      	// 篮框边缘块
-    	      	var backboardBlock = Matter.Bodies.rectangle(1069, 173, 5, 5, {
-    	        	isStatic: true,
-    	        	render: {
-    	          		visible: false
-    	        	}
-    	      	});
+				// 篮框边缘块
+				var backboardBlock = Matter.Bodies.rectangle(1069, 173, 5, 5, {
+					isStatic: true,
+					render: {
+						visible: false
+					}
+				});
 
-    	      	// 四周墙壁
-    	      	Matter.World.add(this.engine.world, [
-    	      		Matter.Bodies.rectangle(667, 5, 1334, 10, { // x, y, w, h
-    	      			isStatic: true
-    	      		}),
-    	      		Matter.Bodies.rectangle(667, 745, 1334, 10, {
-    	      			isStatic: true
-    	      		}),
-    	      		Matter.Bodies.rectangle(5, 375, 10, 750, {
-    	      			isStatic: true
-    	      		}),
-    	      		Matter.Bodies.rectangle(1329, 375, 10, 750, {
-    	      			isStatic: true
-    	      		})
-    	      	]);
+				// 四周墙壁
+				Matter.World.add(this.engine.world, [
+					Matter.Bodies.rectangle(667, 5, 1334, 10, { // x, y, w, h
+						isStatic: true
+					}),
+					Matter.Bodies.rectangle(667, 745, 1334, 10, {
+						isStatic: true
+					}),
+					Matter.Bodies.rectangle(5, 375, 10, 750, {
+						isStatic: true
+					}),
+					Matter.Bodies.rectangle(1329, 375, 10, 750, {
+						isStatic: true
+					})
+				]);
 
-    	      	Matter.World.add(this.engine.world, [netBody, backboard, backboardBlock]);
-		    }
+				Matter.World.add(this.engine.world, [netBody, backboard, backboardBlock]);
+			}
 		}
 
 		Game.init();
-
 	</script>
 
 
-</body></html>
+</body>
+
+</html>
